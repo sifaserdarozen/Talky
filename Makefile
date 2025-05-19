@@ -1,6 +1,14 @@
 
 .PHONY: build test fmt clean
 
+VERSION:=$(shell git rev-parse --short HEAD 2>/dev/null)
+BUILD_DATE:=$(shell date +%Y-%m-%dT%H:%M:%S)
+DIRTY:=$(shell ! [ -z "`git status --porcelain=v1 2>/dev/null`" ] && echo "dirty-")
+BUILD_VERSION:=${DIRTY}${VERSION}
+
+LDFLAGS += -X "github.com/sifaserdarozen/Talky/stun.Version=$(BUILD_VERSION)"
+LDFLAGS += -X "github.com/sifaserdarozen/Talky/stun.BuildDate=$(BUILD_DATE)"
+
 build:
 	mkdir -p bin
 	go build -ldflags "$(LDFLAGS)" -o bin ./...
