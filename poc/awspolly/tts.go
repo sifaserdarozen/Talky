@@ -137,21 +137,3 @@ func main() {
 		}
 	}
 }
-
-/*
-func main() {
-
-	if nil == dbCfg.Url {
-		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithRetryer(func() aws.Retryer {
-			return retry.NewStandard(func(o *retry.StandardOptions) {
-				o.RateLimiter = ratelimit.None
-				o.MaxAttempts = 1
-			})
-		}))
-	} else {
-		provider := credentials.NewStaticCredentialsProvider("someaccess", "somesecret", "sometoken")
-		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithCredentialsProvider(provider), config.WithRegion("local"), config.WithBaseEndpoint(*dbCfg.Url))
-	}
-
-}
-*/
