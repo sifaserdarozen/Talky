@@ -1,4 +1,4 @@
-package stun
+package info
 
 import (
 	"os"

@@ -5,8 +5,8 @@ import (
 )
 
 type Timestamp struct {
-	Word string
-	Time uint64
+	Word     string `json:"value"`
+	TimeInMs uint64 `json:"time"`
 }
 
 type TtsAudio struct {
@@ -15,5 +15,5 @@ type TtsAudio struct {
 }
 
 type Tts interface {
-	Synthesize(ctx context.Context, text string) (TtsAudio, error)
+	Synthesize(ctx context.Context, text string) (*TtsAudio, error)
 }
