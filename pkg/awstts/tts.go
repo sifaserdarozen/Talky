@@ -4,26 +4,40 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 
 	"github.com/sifaserdarozen/talky/pkg/tts"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/polly"
 	"github.com/aws/aws-sdk-go-v2/service/polly/types"
 )
 
 type awsTimestamp struct {
-	Word string `json:"value"`
-	Time uint64 `json:"time"`
+	Word  string `json:"value"`
+	Time  uint64 `json:"time"`
+	Start uint64 `json:"start"`
+	End   uint64 `json:"end"`
+	Type  string `json:"type"`
 }
 
 type awsTts struct {
 	client *polly.Client
 }
 
-func NewAwsTts() (tts.Tts, error) {
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+func NewAwsTts(srvUrl *string) (tts.Tts, error) {
+	var cfg aws.Config
+	var err error
+	if srvUrl == nil {
+		cfg, err = config.LoadDefaultConfig(context.Background())
+	} else {
+		provider := credentials.NewStaticCredentialsProvider("someaccess", "somesecret", "sometoken")
+		cfg, err = config.LoadDefaultConfig(context.Background(), config.WithCredentialsProvider(provider), config.WithRegion("local"), config.WithBaseEndpoint(*srvUrl))
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -74,6 +88,7 @@ func (awsTts awsTts) Synthesize(ctx context.Context, text string) (*tts.TtsAudio
 		// decode an array value (Message)
 		err := dec.Decode(&ts)
 		if err != nil {
+			fmt.Println("Error there ", err)
 			return nil, err
 		}
 		ttsAudio.Timestamps = append(ttsAudio.Timestamps, tts.Timestamp{Word: ts.Word, TimeInMs: ts.Time})
