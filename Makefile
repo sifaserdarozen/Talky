@@ -6,8 +6,8 @@ BUILD_DATE:=$(shell date +%Y-%m-%dT%H:%M:%S)
 DIRTY:=$(shell ! [ -z "`git status --porcelain=v1 2>/dev/null`" ] && echo "dirty-")
 BUILD_VERSION:=${DIRTY}${VERSION}
 
-LDFLAGS += -X "github.com/sifaserdarozen/Talky/stun.Version=$(BUILD_VERSION)"
-LDFLAGS += -X "github.com/sifaserdarozen/Talky/stun.BuildDate=$(BUILD_DATE)"
+LDFLAGS += -X "github.com/sifaserdarozen/Talky/talky.Version=$(BUILD_VERSION)"
+LDFLAGS += -X "github.com/sifaserdarozen/Talky/talky.BuildDate=$(BUILD_DATE)"
 
 build:
 	mkdir -p bin
