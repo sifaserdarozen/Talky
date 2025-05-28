@@ -16,6 +16,11 @@ build:
 test:
 	go test ./...
 
+docker-build-asterisk:
+	docker build -t asterisk -f docker/asterisk/Dockerfile .
+
+docker-build: docker-build-asterisk
+
 fmt:
 	go fmt ./... && go vet ./... && golangci-lint run
 
