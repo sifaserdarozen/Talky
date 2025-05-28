@@ -1,0 +1,36 @@
+services:
+  ippbx:
+    networks:
+      default: # default docker bridge
+      sip_trunk: # connection between cpaas
+        ipv4_address: 172.16.18.100
+    image: local-asterisk:latest
+    build:
+      context: ../asterisk
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ippbx/conf
+        target: /etc/asterisk
+
+  cpaas:
+    networks:
+      default: # default docker bridge
+      sip_trunk: # connection between ippbx
+        ipv4_address: 172.16.18.200
+    image: local-asterisk:latest
+    build:
+      context: ../asterisk
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: cpaas/conf
+        target: /etc/asterisk
+
+networks:
+  sip_trunk:
+    name: br_sip_trunk
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.16.18.0/24"

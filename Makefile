@@ -17,9 +17,20 @@ test:
 	go test ./...
 
 docker-build-asterisk:
-	docker build -t asterisk -f docker/asterisk/Dockerfile .
+	docker build -t local-asterisk -f docker/asterisk/Dockerfile .
 
 docker-build: docker-build-asterisk
+
+docker-run-asterisk:
+	docker run \
+	-it \
+	-v ./docker/asterisk/conf:/etc/asterisk \
+	-p 6060:5060/udp \
+	-p 6060:5060/tcp \
+	local-asterisk:latest
+
+docker-compose-up:
+	docker compose -f docker/sip-trunk/docker-compose.yaml up
 
 fmt:
 	go fmt ./... && go vet ./... && golangci-lint run
