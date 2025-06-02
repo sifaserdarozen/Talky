@@ -2,6 +2,9 @@
 
 set -ex
 
+# generate certificates
+sh ./cert-generate.sh
+
 openrc
 rc-service asterisk start &
 

@@ -1,2 +1,4 @@
 bin/
 tmp/
+**/certificate/**
+!**/certificate/README.md
